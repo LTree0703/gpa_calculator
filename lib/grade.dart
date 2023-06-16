@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:gpa_calculator/topbar.dart';
 
-class GradeForm extends StatefulWidget {
-  const GradeForm({super.key});
+class GradeCalculator extends StatefulWidget {
+  const GradeCalculator({super.key});
 
   @override
-  State<GradeForm> createState() => _GradeFormState();
+  State<GradeCalculator> createState() => _GradeCalculatorState();
 }
 
-class _GradeFormState extends State<GradeForm> {
+class _GradeCalculatorState extends State<GradeCalculator> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+        appBar: PreferredSize(
+      preferredSize: Size.fromHeight(200.0),
+      child: TopBar(
+        title: 'Grade Calculator',
+      ),
+    ));
   }
 }

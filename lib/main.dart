@@ -21,9 +21,14 @@ class LaunchApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -67,7 +72,10 @@ class HomePage extends StatelessWidget {
               style: const ButtonStyle(
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
-              onPressed: () => const GPAForm(),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(_transitionRoute(const GPACalculator()));
+              },
               // <a href="https://www.flaticon.com/free-icons/education" title="education icons">Education icons created by Freepik - Flaticon</a>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -94,7 +102,10 @@ class HomePage extends StatelessWidget {
               style: const ButtonStyle(
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
-              onPressed: () => const GradeForm(),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(_transitionRoute(const GradeCalculator()));
+              },
               // <a href="https://www.flaticon.com/free-icons/grade" title="grade icons">Grade icons created by Freepik - Flaticon</a>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -148,4 +159,22 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Route _transitionRoute(route) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => route,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 3.5);
+      const end = Offset.zero;
+      var curve = Curves.fastLinearToSlowEaseIn;
+      final tween =
+          Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
