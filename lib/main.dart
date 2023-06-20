@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gpa_calculator/gpa.dart';
-import 'package:gpa_calculator/grade.dart';
+import 'package:uni_quitter/gpa.dart';
+import 'package:uni_quitter/grade.dart';
 
 void main() {
   runApp(const LaunchApp());
@@ -12,9 +12,28 @@ class LaunchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Yeet',
-      theme:
-          ThemeData(primarySwatch: Colors.indigo, fontFamily: 'JetBrainsMono'),
+      title: 'Uni Quitter',
+      darkTheme: ThemeData(
+        primarySwatch: Colors.blueGrey,
+        fontFamily: 'JetBrainsMono',
+        colorScheme: const ColorScheme(
+            background: Colors.black12,
+            onBackground: Colors.white,
+            brightness: Brightness.dark,
+            primary: Colors.cyan,
+            onPrimary: Colors.white,
+            secondary: Colors.blueGrey,
+            onSecondary: Colors.white,
+            error: Colors.redAccent,
+            onError: Colors.white,
+            surface: Colors.grey,
+            onSurface: Colors.white),
+      ),
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        primaryColor: const Color(0xFF123262),
+        fontFamily: 'JetBrainsMono',
+      ),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
     );
@@ -70,6 +89,7 @@ class _HomePageState extends State<HomePage> {
             const Flexible(child: SizedBox(height: 177)),
             FilledButton.tonal(
               style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Color(0xff3F5B85)),
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
@@ -100,6 +120,7 @@ class _HomePageState extends State<HomePage> {
             const Flexible(child: SizedBox(height: 42)),
             FilledButton.tonal(
               style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Color(0xff3F5B85)),
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
@@ -135,6 +156,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ElevatedButton(
                   style: const ButtonStyle(
+                      backgroundColor:
+                          MaterialStatePropertyAll(Color(0xff3F5B85)),
                       shape: MaterialStatePropertyAll(CircleBorder(
                           side: BorderSide(style: BorderStyle.none))),
                       fixedSize: MaterialStatePropertyAll(Size(30, 30))),
@@ -145,6 +168,8 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 52),
                 ElevatedButton(
                   style: const ButtonStyle(
+                      backgroundColor:
+                          MaterialStatePropertyAll(Color(0xff3F5B85)),
                       shape: MaterialStatePropertyAll(CircleBorder(
                           side: BorderSide(style: BorderStyle.none))),
                       fixedSize: MaterialStatePropertyAll(Size(30, 30))),
@@ -165,9 +190,9 @@ Route _transitionRoute(route) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => route,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 3.5);
+      const begin = Offset(1.0, 0.0);
       const end = Offset.zero;
-      var curve = Curves.fastLinearToSlowEaseIn;
+      var curve = const Cubic(0.20, 1.25, 1, 1);
       final tween =
           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 

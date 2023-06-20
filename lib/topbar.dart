@@ -23,15 +23,16 @@ class TopBar extends StatelessWidget {
           ),
         ),
         child: AppBar(
+          elevation: 0,
           toolbarHeight: appBarHeight - 50,
-          leadingWidth: 100,
+          leadingWidth: 75,
           backgroundColor: const Color.fromARGB(0, 18, 50, 98),
-          shadowColor: const Color.fromARGB(0, 18, 50, 98),
           title: Text(title),
           leading: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 50, 20, 50),
+            padding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
             child: ElevatedButton(
               style: const ButtonStyle(
+                shape: MaterialStatePropertyAll(CircleBorder()),
                 backgroundColor: MaterialStatePropertyAll(Colors.transparent),
                 shadowColor: MaterialStatePropertyAll(Colors.transparent),
               ),
