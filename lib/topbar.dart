@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+LinearGradient themeGradient() {
+  return const LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color.fromARGB(255, 18, 50, 98),
+      Color.fromARGB(185, 18, 50, 98),
+      Color.fromARGB(0, 18, 50, 98),
+    ],
+  );
+}
+
 class TopBar extends StatelessWidget {
   final String title;
   final appBarHeight = 200.0;
@@ -11,16 +23,8 @@ class TopBar extends StatelessWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(appBarHeight),
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(255, 18, 50, 98),
-              Color.fromARGB(185, 18, 50, 98),
-              Color.fromARGB(0, 18, 50, 98),
-            ],
-          ),
+        decoration: BoxDecoration(
+          gradient: themeGradient(),
         ),
         child: AppBar(
           elevation: 0,
