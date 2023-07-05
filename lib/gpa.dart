@@ -1,60 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uni_quitter/topbar.dart';
-
-class GPAData {
-  double? cumulativeGPA;
-  double? creditsObtained;
-  int numCourses = 6;
-  List<String> courseName = [];
-  List<double> credits = [];
-  List<double> grades = [];
-
-  double get totalGrades {
-    double totalGrades = 0.0;
-    for (int i = 0; i < grades.length; i++) {
-      totalGrades += grades[i] * credits[i];
-    }
-    return totalGrades;
-  }
-
-  double get totalCredits {
-    double totalCredits = 0.0;
-    for (int i = 0; i < credits.length; i++) {
-      totalCredits += credits[i];
-    }
-    return totalCredits;
-  }
-
-  double get semGPA {
-    return (totalGrades / totalCredits);
-  }
-
-  double get cGPA {
-    if (cumulativeGPA == null || creditsObtained == null) {
-      return semGPA;
-    }
-    return (cumulativeGPA! * creditsObtained! + semGPA * totalCredits) /
-        (creditsObtained! + totalCredits);
-  }
-
-  GPAData() {
-    for (int i = 0; i < numCourses; i++) {
-      addEmptyCourse();
-    }
-  }
-
-  void addEmptyCourse() {
-    courseName.add('');
-    credits.add(0.0);
-    grades.add(4.3);
-  }
-
-  void deleteCourse() {
-    courseName.removeLast();
-    credits.removeLast();
-    grades.removeLast();
-  }
-}
+import 'package:uni_quitter/formfield.dart';
+import 'package:uni_quitter/gpadata.dart';
 
 class GPACalculator extends StatefulWidget {
   const GPACalculator({super.key});
@@ -71,8 +18,11 @@ class _GPACalculatorState extends State<GPACalculator> {
 
   late ScrollController _controller;
 
-  GPAData _data = GPAData();
+  static const int numCourses = 6;
+
+  GPAData _data = GPAData(numCourses);
   bool hasSubmitted = false;
+  bool numCourseInputHasChanged = false;
 
   @override
   void initState() {
@@ -92,13 +42,19 @@ class _GPACalculatorState extends State<GPACalculator> {
         curve: Curves.fastEaseInToSlowEaseOut);
   }
 
+  void _closeKeyboard() => FocusManager.instance.primaryFocus!.unfocus();
+
   void _reset() {
     _formKey1.currentState?.reset();
     _formKey2.currentState?.reset();
     _formKey3.currentState?.reset();
     _formKey4.currentState?.reset();
+
+    _closeKeyboard();
+    _scroll(_controller.initialScrollOffset);
+
     setState(() {
-      _data = GPAData();
+      _data = GPAData(numCourses);
       hasSubmitted = false;
     });
   }
@@ -122,7 +78,7 @@ class _GPACalculatorState extends State<GPACalculator> {
         child: TopBar(title: 'GPA Calculator'),
       ),
       body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () => _closeKeyboard(),
         child: ListView(
           controller: _controller,
           children: [
@@ -131,8 +87,7 @@ class _GPACalculatorState extends State<GPACalculator> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  FirstFormInput(
-                    // Cumulative GPA
+                  SimpleTextForm(
                     formKey: _formKey1,
                     labelText: 'Cumulative GPA',
                     validator: (value) {
@@ -148,8 +103,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                       return null;
                     },
                   ),
-                  FirstFormInput(
-                    // Credits Obtained
+                  SimpleTextForm(
                     formKey: _formKey2,
                     labelText: 'Credits already obtained',
                     validator: (value) {
@@ -176,6 +130,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                             key: _formKey3,
                             child: TextFormField(
                               key: UniqueKey(),
+                              autofocus: numCourseInputHasChanged,
                               keyboardType: TextInputType.number,
                               initialValue: _data.numCourses.toString(),
                               style: const TextStyle(fontSize: 16.0),
@@ -192,23 +147,30 @@ class _GPACalculatorState extends State<GPACalculator> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  _data.numCourses = 0;
                                   return 'Required field';
                                 }
                                 try {
-                                  setState(() {
-                                    _data.numCourses = int.parse(value);
-                                  });
+                                  int.parse(value);
                                 } catch (e) {
                                   return 'Invalid input';
                                 }
                                 return null;
                               },
                               onChanged: (value) {
-                                _formKey3.currentState?.validate();
-                                setState(() {
-                                  hasSubmitted = false;
-                                });
+                                if (_formKey3.currentState!.validate()) {
+                                  int newValue = int.parse(value);
+                                  int diff = newValue - _data.numCourses;
+                                  bool? hasIncreased = diff > 0 ? true : false;
+                                  setState(() {
+                                    for (int i = 0; i < diff.abs(); i++) {
+                                      hasIncreased
+                                          ? _data.addEmptyCourse()
+                                          : _data.deleteCourse();
+                                    }
+                                    _data.numCourses = newValue;
+                                    numCourseInputHasChanged = true;
+                                  });
+                                }
                               },
                             ),
                           ),
@@ -237,6 +199,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                                       setState(() {
                                         if (_data.numCourses > 1) {
                                           hasSubmitted = false;
+                                          numCourseInputHasChanged = false;
                                           _data.numCourses--;
                                           _data.deleteCourse();
                                         }
@@ -271,6 +234,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                                     onPressed: () {
                                       setState(() {
                                         hasSubmitted = false;
+                                        numCourseInputHasChanged = false;
                                         _data.numCourses++;
                                         _data.addEmptyCourse();
                                       });
@@ -312,7 +276,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                         List<Widget> children = [];
                         for (var id = 0; id < _data.numCourses; id++) {
                           children.add(
-                            SecondFormInput(
+                            CourseFormInput(
                               id: id,
                               formKey: _formKey4,
                               courseNameOnChange: (value) {
@@ -369,22 +333,9 @@ class _GPACalculatorState extends State<GPACalculator> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-            child: ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Color(0xffBBBBEB)),
-                minimumSize: MaterialStatePropertyAll(Size(135, 51)),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    side: BorderSide(style: BorderStyle.solid),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                _reset();
-                _scroll(_controller.initialScrollOffset);
-              },
+            child: FormButton(
+              backgroundColor: const Color(0xffBBBBEB),
+              onPressed: () => _reset(),
               child: const Text(
                 'Reset',
                 style: TextStyle(color: Colors.black),
@@ -393,22 +344,13 @@ class _GPACalculatorState extends State<GPACalculator> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 50),
-            child: ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Color(0xFF123262)),
-                minimumSize: MaterialStatePropertyAll(Size(135, 51)),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    side: BorderSide(style: BorderStyle.solid),
-                  ),
-                ),
-              ),
+            child: FormButton(
+              backgroundColor: const Color(0xFF123262),
               onPressed: () {
                 if (_callCalculation()) {
                   WidgetsBinding.instance.addPostFrameCallback(
                       (_) => _scroll(_controller.position.maxScrollExtent));
-                  FocusManager.instance.primaryFocus?.unfocus();
+                  _closeKeyboard();
                 }
               },
               child: const Text(
@@ -423,52 +365,8 @@ class _GPACalculatorState extends State<GPACalculator> {
   }
 }
 
-class FirstFormInput extends StatefulWidget {
-  const FirstFormInput(
-      {super.key,
-      required this.formKey,
-      this.labelText,
-      required this.validator});
-
-  final GlobalKey<FormState> formKey;
-  final String? labelText;
-  final Function(String? value) validator;
-
-  @override
-  State<FirstFormInput> createState() => _FirstFormInputState();
-}
-
-class _FirstFormInputState extends State<FirstFormInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 9.5),
-      child: Form(
-        key: widget.formKey,
-        child: TextFormField(
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          style: const TextStyle(fontSize: 16.0),
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-            labelStyle: const TextStyle(fontSize: 16.0),
-            errorStyle: const TextStyle(height: 0.5),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            ),
-          ),
-          validator: (value) => widget.validator(value),
-          onChanged: (value) {
-            widget.formKey.currentState?.validate();
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class SecondFormInput extends StatefulWidget {
-  const SecondFormInput(
+class CourseFormInput extends StatefulWidget {
+  const CourseFormInput(
       {super.key,
       required this.id,
       required this.formKey,
@@ -487,11 +385,11 @@ class SecondFormInput extends StatefulWidget {
   final void Function(double?) gradeInputOnChange;
 
   @override
-  State<SecondFormInput> createState() => _SecondFormInputState();
+  State<CourseFormInput> createState() => _CourseFormInputState();
 }
 
-class _SecondFormInputState extends State<SecondFormInput> {
-  static const Map<String, double?> gradelabel = {
+class _CourseFormInputState extends State<CourseFormInput> {
+  Map<String, double?> gradelabel = {
     'A+': 4.30,
     'A': 4.00,
     'A-': 3.70,
@@ -688,8 +586,7 @@ class _OutputTableState extends State<OutputTable> {
                     ),
                     Container(
                       alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 7.5),
+                      padding: const EdgeInsets.symmetric(horizontal: 7.5),
                       child: Text(widget.data.cGPA.toStringAsFixed(3)),
                     ),
                   ],
