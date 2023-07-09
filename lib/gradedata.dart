@@ -1,5 +1,5 @@
 class GradeData {
-  int numCourses;
+  int numAssignments;
   List<String> assignments = [];
   List<String> componentGradesInput = [];
   List<double> componentGrades = [];
@@ -7,7 +7,7 @@ class GradeData {
 
   double get totalGrades {
     double totalGrades = 0.0;
-    for (int i = 0; i < numCourses; i++) {
+    for (int i = 0; i < numAssignments; i++) {
       totalGrades += componentGrades[i];
     }
     return totalGrades;
@@ -15,7 +15,7 @@ class GradeData {
 
   double get totalWeights {
     double totalWeights = 0.0;
-    for (int i = 0; i < numCourses; i++) {
+    for (int i = 0; i < numAssignments; i++) {
       totalWeights += weights[i];
     }
     return totalWeights / 100;
@@ -23,18 +23,18 @@ class GradeData {
 
   double get averageGrade {
     double sum = 0.0;
-    for (int i = 0; i < numCourses; i++) {
+    for (int i = 0; i < numAssignments; i++) {
       sum += componentGrades[i] * (weights[i] / 100);
     }
     return sum / totalWeights;
   }
 
-  bool get hasCompleted {
-    return totalWeights > 100;
+  bool get hasCompletedCourse {
+    return totalWeights == 100;
   }
 
-  GradeData(this.numCourses) {
-    for (int i = 0; i < numCourses; i++) {
+  GradeData(this.numAssignments) {
+    for (int i = 0; i < numAssignments; i++) {
       addEmptyCourse();
     }
   }

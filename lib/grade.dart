@@ -3,38 +3,6 @@ import 'package:uni_quitter/topbar.dart';
 import 'package:uni_quitter/formfield.dart';
 import 'package:uni_quitter/gradedata.dart';
 
-Map<String, double> gradelabel = {
-  'A+': 4.30,
-  'A': 4.00,
-  'A-': 3.70,
-  'B+': 3.30,
-  'B': 3.00,
-  'B-': 2.70,
-  'C+': 2.30,
-  'C': 2.00,
-  'C-': 1.70,
-  'D+': 1.30,
-  'D': 1.00,
-  'D-': 0.70,
-  'F': 0.00,
-};
-
-Map<double, double> percentagelabel = {
-  60.0: 0.00,
-  63.0: 0.70,
-  67.0: 1.00,
-  70.0: 1.30,
-  73.0: 1.70,
-  77.0: 2.00,
-  80.0: 2.30,
-  83.0: 2.70,
-  87.0: 3.00,
-  90.0: 3.30,
-  93.0: 3.70,
-  97.0: 4.00,
-  100.1: 4.30,
-};
-
 class GradeCalculator extends StatefulWidget {
   const GradeCalculator({super.key});
 
@@ -50,9 +18,9 @@ class _GradeCalculatorState extends State<GradeCalculator> {
 
   late ScrollController _controller;
 
-  static const int numCourses = 6;
+  static const int numAssignments = 5;
 
-  GradeData _data = GradeData(numCourses);
+  GradeData _data = GradeData(numAssignments);
   bool hasSubmitted = false;
   bool numCourseInputHasChanged = false;
 
@@ -86,7 +54,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     _scroll(_controller.initialScrollOffset);
 
     setState(() {
-      _data = GradeData(numCourses);
+      _data = GradeData(numAssignments);
       hasSubmitted = false;
       numCourseInputHasChanged = false;
     });
@@ -101,6 +69,40 @@ class _GradeCalculatorState extends State<GradeCalculator> {
       return true;
     }
     return false;
+  }
+
+  bool gradeProcessSucessful(String? value, int id) {
+    if (value == null || value.isEmpty) {
+      return false;
+    }
+    // Label case
+    if (gradelabel[value] != null) {
+      _data.componentGradesInput[id] = value;
+      _data.componentGrades[id] = gradelabel[value]!;
+      return true;
+    }
+    // Percentage case
+    double score;
+    try {
+      score = double.parse(value);
+    } catch (e) {
+      return false;
+    }
+    if (score < 0) {
+      return false;
+    } else if (score >= 100) {
+      _data.componentGradesInput[id] = value;
+      _data.componentGrades[id] = 4.3;
+      return true;
+    }
+    for (double key in percentagelabel.keys) {
+      if (score < key) {
+        _data.componentGradesInput[id] = value.toString();
+        _data.componentGrades[id] = percentagelabel[key]!;
+        break;
+      }
+    }
+    return true;
   }
 
   @override
@@ -134,7 +136,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                               key: UniqueKey(),
                               autofocus: numCourseInputHasChanged,
                               keyboardType: TextInputType.number,
-                              initialValue: _data.numCourses.toString(),
+                              initialValue: _data.numAssignments.toString(),
                               style: const TextStyle(fontSize: 16.0),
                               decoration: const InputDecoration(
                                 labelText: '*Number of courses taken',
@@ -161,7 +163,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                               onChanged: (value) {
                                 if (_formKey3.currentState!.validate()) {
                                   int newValue = int.parse(value);
-                                  int diff = newValue - _data.numCourses;
+                                  int diff = newValue - _data.numAssignments;
                                   bool? hasIncreased = diff > 0 ? true : false;
                                   setState(() {
                                     for (int i = 0; i < diff.abs(); i++) {
@@ -169,7 +171,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                           ? _data.addEmptyCourse()
                                           : _data.deleteCourse();
                                     }
-                                    _data.numCourses = newValue;
+                                    _data.numAssignments = newValue;
                                     numCourseInputHasChanged = true;
                                   });
                                 }
@@ -193,16 +195,19 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                       backgroundColor: MaterialStatePropertyAll(
                                           Color(0xffBBBBEB)),
                                       shape: MaterialStatePropertyAll(
-                                          RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20.0)))),
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        if (_data.numCourses > 1) {
+                                        if (_data.numAssignments > 1) {
                                           hasSubmitted = false;
                                           numCourseInputHasChanged = false;
-                                          _data.numCourses--;
+                                          _data.numAssignments--;
                                           _data.deleteCourse();
                                         }
                                       });
@@ -239,7 +244,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                       setState(() {
                                         hasSubmitted = false;
                                         numCourseInputHasChanged = false;
-                                        _data.numCourses++;
+                                        _data.numAssignments++;
                                         _data.addEmptyCourse();
                                       });
                                     },
@@ -277,7 +282,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                     child: Builder(
                       builder: (context) {
                         List<Widget> children = [];
-                        for (var id = 0; id < _data.numCourses; id++) {
+                        for (var id = 0; id < _data.numAssignments; id++) {
                           children.add(
                             CourseFormInput(
                               id: id,
@@ -291,36 +296,10 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                               },
                               gradeValues: _data.componentGrades,
                               gradeInputValidator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '';
-                                }
-                                // Label case
-                                if (gradelabel[value] != null) {
-                                  _data.componentGradesInput[id] = value;
-                                  _data.componentGrades[id] =
-                                      gradelabel[value]!;
+                                if (gradeProcessSucessful(value, id)) {
                                   return null;
                                 }
-                                // Percentage case
-                                double score;
-                                try {
-                                  score = double.parse(value);
-                                } catch (e) {
-                                  return '';
-                                }
-                                if (score < 0) {
-                                  return '';
-                                }
-                                for (double key in percentagelabel.keys) {
-                                  if (score < key) {
-                                    _data.componentGradesInput[id] =
-                                        value.toString();
-                                    _data.componentGrades[id] =
-                                        percentagelabel[key]!;
-                                    break;
-                                  }
-                                }
-                                return null;
+                                return '';
                               },
                               weightValues: _data.weights,
                               weightInputValidator: (value) {
@@ -502,30 +481,35 @@ class OutputTable extends StatefulWidget {
 class _OutputTableState extends State<OutputTable> {
   List<TableRow> courseData() {
     List<TableRow> children = [];
-    for (var id = 0; id < widget.data.numCourses; id++) {
-      children.add(TableRow(children: [
-        Padding(
-          padding: const EdgeInsets.all(7.5),
-          child: Text(widget.data.assignments[id] == ''
-              ? 'Task ${id + 1}'
-              : widget.data.assignments[id]),
-        ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
+    for (var id = 0; id < widget.data.numAssignments; id++) {
+      children.add(
+        TableRow(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(7.5),
-              child: Text(
-                widget.data.componentGradesInput[id],
-              )),
+              child: Text(widget.data.assignments[id] == ''
+                  ? 'Task ${id + 1}'
+                  : widget.data.assignments[id]),
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(7.5),
+                child: Text(
+                  widget.data.componentGradesInput[id],
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(7.5),
+                child: Text('${widget.data.weights[id].toStringAsFixed(0)} %'),
+              ),
+            ),
+          ],
         ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.all(7.5),
-            child: Text('${widget.data.weights[id].toStringAsFixed(0)} %'),
-          ),
-        ),
-      ]));
+      );
     }
     return children;
   }
@@ -554,7 +538,9 @@ class _OutputTableState extends State<OutputTable> {
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
-                  style: BorderStyle.solid, color: const Color(0xff888888)),
+                style: BorderStyle.solid,
+                color: const Color(0xff888888),
+              ),
               borderRadius: BorderRadius.circular(30.0),
             ),
             child: Column(
@@ -562,10 +548,13 @@ class _OutputTableState extends State<OutputTable> {
               children: [
                 const Padding(
                   padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
-                  child: Text('RESULT',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                      )),
+                  child: Text(
+                    'RESULT',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Table(
                   border: TableBorder.all(
@@ -599,14 +588,32 @@ class _OutputTableState extends State<OutputTable> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(7.5),
+            padding: const EdgeInsets.all(10),
             child: Builder(
                 key: UniqueKey(),
                 builder: (context) {
                   double totalWeight = widget.data.totalWeights;
-                  if (totalWeight > 1) {
-                    return Text(
-                        '*This result is based on the total weight of ${totalWeight * 100}%, Please make sure your input is correct.');
+                  if (!widget.data.hasCompletedCourse) {
+                    return RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          const TextSpan(
+                            text:
+                                '*This result is based on the total weight of ',
+                            style: TextStyle(
+                              fontFamily: 'JetBrainsMono',
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${(totalWeight * 100).toStringAsFixed(0)}%.',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'JetBrainsMono',
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }
                   return const Text('');
                 }),

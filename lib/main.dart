@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_quitter/gpa.dart';
 import 'package:uni_quitter/grade.dart';
@@ -13,25 +14,21 @@ class LaunchApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Uni Quitter',
-      darkTheme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        fontFamily: 'JetBrainsMono',
-        colorScheme: const ColorScheme(
-            background: Colors.black12,
-            onBackground: Colors.white,
-            brightness: Brightness.dark,
-            primary: Colors.cyan,
-            onPrimary: Colors.white,
-            secondary: Colors.blueGrey,
-            onSecondary: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-            surface: Colors.grey,
-            onSurface: Colors.white),
-      ),
       theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.indigo,
         primaryColor: const Color(0xFF123262),
+        fontFamily: 'JetBrainsMono',
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blueGrey,
         fontFamily: 'JetBrainsMono',
       ),
       debugShowCheckedModeBanner: false,
@@ -69,18 +66,17 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Flexible(child: SizedBox(height: 230)),
             const Text(
-              'Uni\nQuitter',
+              'Pass 3\nExceed 4',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white60,
-                // decoration: TextDecoration.lineThrough,
                 fontSize: 64,
               ),
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
               child: const Text(
-                '\'People go through three stages: birth, get an F, perish.\' (a random uni fm, 2023)',
+                'academic planner\nat your fingertip😈',
                 style: TextStyle(
                   color: Colors.white60,
                 ),
@@ -93,8 +89,10 @@ class _HomePageState extends State<HomePage> {
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .push(_transitionRoute(const GPACalculator()));
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: ((context) => const GPACalculator())));
               },
               // <a href="https://www.flaticon.com/free-icons/education" title="education icons">Education icons created by Freepik - Flaticon</a>
               child: Row(
@@ -124,8 +122,10 @@ class _HomePageState extends State<HomePage> {
                 fixedSize: MaterialStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .push(_transitionRoute(const GradeCalculator()));
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: ((context) => const GradeCalculator())));
               },
               // <a href="https://www.flaticon.com/free-icons/grade" title="grade icons">Grade icons created by Freepik - Flaticon</a>
               child: Row(
@@ -156,12 +156,15 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ElevatedButton(
                   style: const ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Color(0xff3F5B85)),
-                      shape: MaterialStatePropertyAll(CircleBorder(
-                          side: BorderSide(style: BorderStyle.none))),
-                      fixedSize: MaterialStatePropertyAll(Size(30, 30))),
-                  onPressed: () {},
+                    backgroundColor:
+                        MaterialStatePropertyAll(Color(0xff3F5B85)),
+                    shape: MaterialStatePropertyAll(CircleBorder(
+                        side: BorderSide(style: BorderStyle.none))),
+                    fixedSize: MaterialStatePropertyAll(Size(30, 30)),
+                  ),
+                  onPressed: () {
+                    // TODO: To be implemented
+                  },
                   child: Image.asset('assets/setting.png',
                       color: Colors.white, width: 24, height: 24),
                 ),
@@ -173,7 +176,9 @@ class _HomePageState extends State<HomePage> {
                       shape: MaterialStatePropertyAll(CircleBorder(
                           side: BorderSide(style: BorderStyle.none))),
                       fixedSize: MaterialStatePropertyAll(Size(30, 30))),
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: to be implemented
+                  },
                   child: Image.asset('assets/info.png',
                       color: Colors.white, width: 24, height: 24),
                 ),

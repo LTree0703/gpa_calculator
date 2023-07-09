@@ -389,20 +389,6 @@ class CourseFormInput extends StatefulWidget {
 }
 
 class _CourseFormInputState extends State<CourseFormInput> {
-  Map<String, double?> gradelabel = {
-    'A+': 4.30,
-    'A': 4.00,
-    'A-': 3.70,
-    'B+': 3.30,
-    'B': 3.00,
-    'B-': 2.70,
-    'C+': 2.30,
-    'C': 2.00,
-    'C-': 1.70,
-    'D+': 1.30,
-    'D': 1.00,
-    'F': 0.00,
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -504,29 +490,34 @@ class _OutputTableState extends State<OutputTable> {
   List<TableRow> courseData() {
     List<TableRow> children = [];
     for (var id = 0; id < widget.data.numCourses; id++) {
-      children.add(TableRow(children: [
-        Padding(
-          padding: const EdgeInsets.all(7.5),
-          child: Text(widget.data.courseName[id] == ''
-              ? 'Course ${id + 1}'
-              : widget.data.courseName[id]),
-        ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
+      children.add(
+        TableRow(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(7.5),
-              child: Text(
-                widget.data.credits[id].toString(),
-              )),
+              child: Text(widget.data.courseName[id] == ''
+                  ? 'Course ${id + 1}'
+                  : widget.data.courseName[id]),
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(7.5),
+                child: Text(
+                  widget.data.credits[id].toString(),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(7.5),
+                child: Text(widget.data.grades[id].toString()),
+              ),
+            ),
+          ],
         ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.all(7.5),
-            child: Text(widget.data.grades[id].toString()),
-          ),
-        ),
-      ]));
+      );
     }
     return children;
   }
