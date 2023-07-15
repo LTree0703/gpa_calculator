@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_quitter/gpa.dart';
 import 'package:uni_quitter/grade.dart';
+import 'package:uni_quitter/overlay.dart';
 
 void main() {
   runApp(const LaunchApp());
@@ -29,7 +30,7 @@ class LaunchApp extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
-        fontFamily: 'JetBrainsMono',
+        fontFamily: 'San Francisco',
       ),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
@@ -39,12 +40,12 @@ class LaunchApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -162,9 +163,12 @@ class _HomePageState extends State<HomePage> {
                         side: BorderSide(style: BorderStyle.none))),
                     fixedSize: MaterialStatePropertyAll(Size(30, 30)),
                   ),
-                  onPressed: () {
-                    // TODO: To be implemented
-                  },
+                  onPressed: () => _openOverlay(
+                      context,
+                      const OverlayPage(
+                        title: 'Settings',
+                        child: SettingsPage(),
+                      )),
                   child: Image.asset('assets/setting.png',
                       color: Colors.white, width: 24, height: 24),
                 ),
@@ -176,9 +180,12 @@ class _HomePageState extends State<HomePage> {
                       shape: MaterialStatePropertyAll(CircleBorder(
                           side: BorderSide(style: BorderStyle.none))),
                       fixedSize: MaterialStatePropertyAll(Size(30, 30))),
-                  onPressed: () {
-                    // TODO: to be implemented
-                  },
+                  onPressed: () => _openOverlay(
+                      context,
+                      const OverlayPage(
+                        title: 'About',
+                        child: InfoPage(),
+                      )),
                   child: Image.asset('assets/info.png',
                       color: Colors.white, width: 24, height: 24),
                 ),
@@ -191,13 +198,16 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Route _transitionRoute(route) {
-  return PageRouteBuilder(
+Future<Object?> _openOverlay(BuildContext context, Widget route) {
+  return showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: '',
     pageBuilder: (context, animation, secondaryAnimation) => route,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0);
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
       const end = Offset.zero;
-      var curve = const Cubic(0.20, 1.25, 1, 1);
+      var curve = const Cubic(0.20, 1.0, 1.0, 1.0);
       final tween =
           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 

@@ -1,10 +1,16 @@
 class GPAData {
   double? cumulativeGPA;
   double? creditsObtained;
-  int numCourses;
+  int numCourses = 6;
   List<String> courseName = [];
   List<double> credits = [];
   List<double> grades = [];
+
+  GPAData() {
+    for (int i = 0; i < numCourses; i++) {
+      addEmptyCourse();
+    }
+  }
 
   double get totalGrades {
     double totalGrades = 0.0;
@@ -32,12 +38,6 @@ class GPAData {
     }
     return (cumulativeGPA! * creditsObtained! + semGPA * totalCredits) /
         (creditsObtained! + totalCredits);
-  }
-
-  GPAData(this.numCourses) {
-    for (int i = 0; i < numCourses; i++) {
-      addEmptyCourse();
-    }
   }
 
   void addEmptyCourse() {

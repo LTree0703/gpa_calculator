@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:uni_quitter/topbar.dart';
 import 'package:uni_quitter/formfield.dart';
-import 'package:uni_quitter/gradedata.dart';
+import 'package:uni_quitter/backend/gradedata.dart';
+import 'package:uni_quitter/backend/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GradeCalculator extends StatefulWidget {
   const GradeCalculator({super.key});
@@ -18,14 +20,30 @@ class _GradeCalculatorState extends State<GradeCalculator> {
 
   late ScrollController _controller;
 
-  static const int numAssignments = 5;
-
-  GradeData _data = GradeData(numAssignments);
+  GradeData _data = GradeData();
   bool hasSubmitted = false;
-  bool numCourseInputHasChanged = false;
+  bool numAssignmentInputHasChanged = false;
+
+  void loadPage() async {
+    UserConfig config = UserConfig(await SharedPreferences.getInstance());
+    alterNumAssignmentValue(config.defaultAssignments, false);
+  }
+
+  void alterNumAssignmentValue(int newValue, bool changedFromTextFormField) {
+    int diff = newValue - _data.numAssignments;
+    bool? hasIncreased = diff > 0 ? true : false;
+    setState(() {
+      for (int i = 0; i < diff.abs(); i++) {
+        hasIncreased ? _data.addEmptyCourse() : _data.deleteCourse();
+      }
+      _data.numAssignments = newValue;
+      numAssignmentInputHasChanged = changedFromTextFormField;
+    });
+  }
 
   @override
   void initState() {
+    loadPage();
     _controller = ScrollController();
     super.initState();
   }
@@ -54,9 +72,9 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     _scroll(_controller.initialScrollOffset);
 
     setState(() {
-      _data = GradeData(numAssignments);
+      _data = GradeData();
       hasSubmitted = false;
-      numCourseInputHasChanged = false;
+      numAssignmentInputHasChanged = false;
     });
   }
 
@@ -64,7 +82,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     if (_formKey4.currentState!.validate()) {
       setState(() {
         hasSubmitted = true;
-        numCourseInputHasChanged = false;
+        numAssignmentInputHasChanged = false;
       });
       return true;
     }
@@ -134,12 +152,12 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                             key: _formKey3,
                             child: TextFormField(
                               key: UniqueKey(),
-                              autofocus: numCourseInputHasChanged,
+                              autofocus: numAssignmentInputHasChanged,
                               keyboardType: TextInputType.number,
                               initialValue: _data.numAssignments.toString(),
                               style: const TextStyle(fontSize: 16.0),
                               decoration: const InputDecoration(
-                                labelText: '*Number of courses taken',
+                                labelText: '*Number of Assignments',
                                 labelStyle: TextStyle(fontSize: 16.0),
                                 errorStyle: TextStyle(height: 0.5),
                                 contentPadding:
@@ -162,18 +180,8 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                               },
                               onChanged: (value) {
                                 if (_formKey3.currentState!.validate()) {
-                                  int newValue = int.parse(value);
-                                  int diff = newValue - _data.numAssignments;
-                                  bool? hasIncreased = diff > 0 ? true : false;
-                                  setState(() {
-                                    for (int i = 0; i < diff.abs(); i++) {
-                                      hasIncreased
-                                          ? _data.addEmptyCourse()
-                                          : _data.deleteCourse();
-                                    }
-                                    _data.numAssignments = newValue;
-                                    numCourseInputHasChanged = true;
-                                  });
+                                  alterNumAssignmentValue(
+                                      int.parse(value), true);
                                 }
                               },
                             ),
@@ -206,7 +214,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                       setState(() {
                                         if (_data.numAssignments > 1) {
                                           hasSubmitted = false;
-                                          numCourseInputHasChanged = false;
+                                          numAssignmentInputHasChanged = false;
                                           _data.numAssignments--;
                                           _data.deleteCourse();
                                         }
@@ -243,7 +251,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                     onPressed: () {
                                       setState(() {
                                         hasSubmitted = false;
-                                        numCourseInputHasChanged = false;
+                                        numAssignmentInputHasChanged = false;
                                         _data.numAssignments++;
                                         _data.addEmptyCourse();
                                       });

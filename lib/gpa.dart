@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:uni_quitter/backend/settings.dart';
 import 'package:uni_quitter/topbar.dart';
 import 'package:uni_quitter/formfield.dart';
-import 'package:uni_quitter/gpadata.dart';
+import 'package:uni_quitter/backend/gpadata.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GPACalculator extends StatefulWidget {
   const GPACalculator({super.key});
@@ -18,14 +20,30 @@ class _GPACalculatorState extends State<GPACalculator> {
 
   late ScrollController _controller;
 
-  static const int numCourses = 6;
-
-  GPAData _data = GPAData(numCourses);
+  GPAData _data = GPAData();
   bool hasSubmitted = false;
   bool numCourseInputHasChanged = false;
 
+  void loadPage() async {
+    UserConfig config = UserConfig(await SharedPreferences.getInstance());
+    alterNumCourseValue(config.defaultCourses, false);
+  }
+
+  void alterNumCourseValue(int newValue, bool changedFromTextFormField) {
+    int diff = newValue - _data.numCourses;
+    bool? hasIncreased = diff > 0 ? true : false;
+    setState(() {
+      for (int i = 0; i < diff.abs(); i++) {
+        hasIncreased ? _data.addEmptyCourse() : _data.deleteCourse();
+      }
+      _data.numCourses = newValue;
+      numCourseInputHasChanged = changedFromTextFormField;
+    });
+  }
+
   @override
   void initState() {
+    loadPage();
     _controller = ScrollController();
     super.initState();
   }
@@ -54,7 +72,7 @@ class _GPACalculatorState extends State<GPACalculator> {
     _scroll(_controller.initialScrollOffset);
 
     setState(() {
-      _data = GPAData(numCourses);
+      _data = GPAData();
       hasSubmitted = false;
     });
   }
@@ -158,18 +176,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                               },
                               onChanged: (value) {
                                 if (_formKey3.currentState!.validate()) {
-                                  int newValue = int.parse(value);
-                                  int diff = newValue - _data.numCourses;
-                                  bool? hasIncreased = diff > 0 ? true : false;
-                                  setState(() {
-                                    for (int i = 0; i < diff.abs(); i++) {
-                                      hasIncreased
-                                          ? _data.addEmptyCourse()
-                                          : _data.deleteCourse();
-                                    }
-                                    _data.numCourses = newValue;
-                                    numCourseInputHasChanged = true;
-                                  });
+                                  alterNumCourseValue(int.parse(value), true);
                                 }
                               },
                             ),
@@ -389,7 +396,6 @@ class CourseFormInput extends StatefulWidget {
 }
 
 class _CourseFormInputState extends State<CourseFormInput> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
