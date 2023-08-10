@@ -30,7 +30,7 @@ class LaunchApp extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
-        fontFamily: 'San Francisco',
+        fontFamily: 'JetBrainsMono',
       ),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),

@@ -10,10 +10,10 @@ class UserConfig {
   }
 
   int get defaultCourses {
-    return prefs.getInt('defaultCourses')!;
+    return prefs.getInt('defaultCourses') ?? 6;
   }
 
   int get defaultAssignments {
-    return prefs.getInt('defaultAssignments')!;
+    return prefs.getInt('defaultAssignments') ?? 5;
   }
 }
