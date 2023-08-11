@@ -45,7 +45,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -207,10 +206,9 @@ Future<Object?> _openOverlay(BuildContext context, Widget route) {
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;
-      var curve = const Cubic(0.20, 1.0, 1.0, 1.0);
+      var curve = const Cubic(0.20, 0.75, 0.75, 1.0);
       final tween =
           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
       return SlideTransition(
         position: animation.drive(tween),
         child: child,

@@ -536,7 +536,7 @@ class _OutputTableState extends State<OutputTable> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 350.0),
+      padding: const EdgeInsets.only(bottom: 150.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(

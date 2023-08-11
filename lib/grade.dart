@@ -93,6 +93,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     if (value == null || value.isEmpty) {
       return false;
     }
+    value = value.toUpperCase();
     // Label case
     if (gradelabel[value] != null) {
       _data.componentGradesInput[id] = value;
@@ -540,7 +541,7 @@ class _OutputTableState extends State<OutputTable> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 300.0),
+      padding: const EdgeInsets.only(bottom: 160.0),
       child: Column(
         children: [
           DecoratedBox(

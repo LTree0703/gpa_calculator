@@ -56,10 +56,12 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   int defaultCourses = 6;
+  int defaultAssignments = 5;
   void loadPage() async {
     UserConfig config = UserConfig(await SharedPreferences.getInstance());
     setState(() {
       defaultCourses = config.defaultCourses;
+      defaultAssignments = config.defaultAssignments;
     });
   }
 
@@ -69,19 +71,39 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
-  void minusByOne(int target) async {
+  void courseMinusByOne() async {
     UserConfig config = UserConfig(await SharedPreferences.getInstance());
-    config.alter('defaultCourses', target - 1);
-    setState(() {
-      target--;
-    });
+    if (defaultCourses - 1 > 0) {
+      config.alter('defaultCourses', defaultCourses - 1);
+      setState(() {
+        defaultCourses--;
+      });
+    }
   }
 
-  void addByOne(int target) async {
+  void courseAddByOne() async {
     UserConfig config = UserConfig(await SharedPreferences.getInstance());
     config.alter('defaultCourses', defaultCourses + 1);
     setState(() {
       defaultCourses++;
+    });
+  }
+
+  void asmMinusByOne() async {
+    UserConfig config = UserConfig(await SharedPreferences.getInstance());
+    if (defaultAssignments - 1 > 0) {
+      config.alter('defaultAssignments', defaultAssignments - 1);
+      setState(() {
+        defaultAssignments--;
+      });
+    }
+  }
+
+  void asmAddByOne() async {
+    UserConfig config = UserConfig(await SharedPreferences.getInstance());
+    config.alter('defaultAssignments', defaultAssignments + 1);
+    setState(() {
+      defaultAssignments++;
     });
   }
 
@@ -91,20 +113,164 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                child: Text('Default number of courses (GPA)'),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => addByOne(defaultCourses),
-                  child: Text(defaultCourses.toString()),
+          Padding(
+            // Course
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(
+                  child: Text('Default number of courses (GPA)'),
                 ),
-              )
-            ],
-          )
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              style: const ButtonStyle(
+                                elevation: MaterialStatePropertyAll(0),
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Color(0xffAAAADA)),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20.0),
+                                            bottomLeft:
+                                                Radius.circular(20.0)))),
+                              ),
+                              onPressed: () => courseMinusByOne(),
+                              child: const Text('-',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: const ButtonStyle(
+                              elevation: MaterialStatePropertyAll(0),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.blueGrey),
+                              shape: MaterialStatePropertyAll(
+                                  BeveledRectangleBorder())),
+                          onPressed: null,
+                          child: Text(defaultCourses.toString()),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              style: const ButtonStyle(
+                                elevation: MaterialStatePropertyAll(0),
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Color(0xff345374)),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20.0),
+                                            bottomRight:
+                                                Radius.circular(20.0)))),
+                              ),
+                              onPressed: () => courseAddByOne(),
+                              child: const Text('+',
+                                  style: TextStyle(fontSize: 20)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            // ASM
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(
+                  child: Text('Default number of assignments'),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              style: const ButtonStyle(
+                                elevation: MaterialStatePropertyAll(0),
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Color(0xffAAAADA)),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20.0),
+                                            bottomLeft:
+                                                Radius.circular(20.0)))),
+                              ),
+                              onPressed: () => asmMinusByOne(),
+                              child: const Text('-',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: const ButtonStyle(
+                              elevation: MaterialStatePropertyAll(0),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.blueGrey),
+                              shape: MaterialStatePropertyAll(
+                                  BeveledRectangleBorder())),
+                          onPressed: null,
+                          child: Text(defaultAssignments.toString()),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              style: const ButtonStyle(
+                                elevation: MaterialStatePropertyAll(0),
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Color(0xff345374)),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20.0),
+                                            bottomRight:
+                                                Radius.circular(20.0)))),
+                              ),
+                              onPressed: () => asmAddByOne(),
+                              child: const Text('+',
+                                  style: TextStyle(fontSize: 20)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -114,10 +280,17 @@ class _SettingsPageState extends State<SettingsPage> {
 class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
 
+  final String text = 'This app is created by Livear Pang';
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          child: Center(child: Text(text)),
+        ),
+      ],
     );
   }
 }
