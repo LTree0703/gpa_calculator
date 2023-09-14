@@ -78,7 +78,11 @@ class _GPACalculatorState extends State<GPACalculator> {
   }
 
   bool _callCalculation() {
-    if (_formKey4.currentState!.validate()) {
+    if (_formKey1.currentState!.validate() &&
+        _formKey2.currentState!.validate() &&
+        _formKey4.currentState!.validate() &&
+        (_data.cumulativeGPA == null && _data.creditsObtained == null ||
+            _data.cumulativeGPA != null && _data.creditsObtained != null)) {
       setState(() {
         hasSubmitted = true;
       });
@@ -114,6 +118,10 @@ class _GPACalculatorState extends State<GPACalculator> {
                         return null;
                       }
                       try {
+                        var tmp = double.parse(value);
+                        if (tmp > 4.3) {
+                          return 'cGPA shouldn\'t be greater than 4.3';
+                        }
                         _data.cumulativeGPA = double.parse(value);
                       } catch (e) {
                         return 'Invalid input';
@@ -358,6 +366,8 @@ class _GPACalculatorState extends State<GPACalculator> {
                   WidgetsBinding.instance.addPostFrameCallback(
                       (_) => _scroll(_controller.position.maxScrollExtent));
                   _closeKeyboard();
+                } else {
+                  _scroll(_controller.initialScrollOffset);
                 }
               },
               child: const Text(
