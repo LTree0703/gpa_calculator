@@ -90,9 +90,9 @@ class FormButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(backgroundColor),
-        minimumSize: const MaterialStatePropertyAll(Size(135, 51)),
-        shape: const MaterialStatePropertyAll(
+        backgroundColor: WidgetStatePropertyAll(backgroundColor),
+        minimumSize: const WidgetStatePropertyAll(Size(135, 51)),
+        shape: const WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
             side: BorderSide(style: BorderStyle.solid),

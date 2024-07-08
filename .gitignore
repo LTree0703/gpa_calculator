@@ -5,6 +5,7 @@ test.*
 *.pyc
 *.swp
 .DS_Store
+.vscode/
 .atom/
 .buildlog/
 .history

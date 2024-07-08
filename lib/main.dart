@@ -85,8 +85,8 @@ class _HomePageState extends State<HomePage> {
             const Flexible(child: SizedBox(height: 177)),
             FilledButton.tonal(
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Color(0xff3F5B85)),
-                fixedSize: MaterialStatePropertyAll(Size(307, 76)),
+                backgroundColor: WidgetStatePropertyAll(Color(0xff3F5B85)),
+                fixedSize: WidgetStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
                 Navigator.push(
@@ -94,7 +94,6 @@ class _HomePageState extends State<HomePage> {
                     CupertinoPageRoute(
                         builder: ((context) => const GPACalculator())));
               },
-              // <a href="https://www.flaticon.com/free-icons/education" title="education icons">Education icons created by Freepik - Flaticon</a>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -118,8 +117,8 @@ class _HomePageState extends State<HomePage> {
             const Flexible(child: SizedBox(height: 42)),
             FilledButton.tonal(
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Color(0xff3F5B85)),
-                fixedSize: MaterialStatePropertyAll(Size(307, 76)),
+                backgroundColor: WidgetStatePropertyAll(Color(0xff3F5B85)),
+                fixedSize: WidgetStatePropertyAll(Size(307, 76)),
               ),
               onPressed: () {
                 Navigator.push(
@@ -127,7 +126,6 @@ class _HomePageState extends State<HomePage> {
                     CupertinoPageRoute(
                         builder: ((context) => const GradeCalculator())));
               },
-              // <a href="https://www.flaticon.com/free-icons/grade" title="grade icons">Grade icons created by Freepik - Flaticon</a>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -149,18 +147,16 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 42),
-            // <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Freepik - Flaticon</a>
-            // <a href="https://www.flaticon.com/free-icons/about" title="about icons">About icons created by Tempo_doloe - Flaticon</a>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                        MaterialStatePropertyAll(Color(0xff3F5B85)),
-                    shape: MaterialStatePropertyAll(CircleBorder(
+                        WidgetStatePropertyAll(Color(0xff3F5B85)),
+                    shape: WidgetStatePropertyAll(CircleBorder(
                         side: BorderSide(style: BorderStyle.none))),
-                    fixedSize: MaterialStatePropertyAll(Size(30, 30)),
+                    fixedSize: WidgetStatePropertyAll(Size(30, 30)),
                   ),
                   onPressed: () => _openOverlay(
                       context,
@@ -175,10 +171,10 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor:
-                          MaterialStatePropertyAll(Color(0xff3F5B85)),
-                      shape: MaterialStatePropertyAll(CircleBorder(
+                          WidgetStatePropertyAll(Color(0xff3F5B85)),
+                      shape: WidgetStatePropertyAll(CircleBorder(
                           side: BorderSide(style: BorderStyle.none))),
-                      fixedSize: MaterialStatePropertyAll(Size(30, 30))),
+                      fixedSize: WidgetStatePropertyAll(Size(30, 30))),
                   onPressed: () => _openOverlay(
                       context,
                       const OverlayPage(
@@ -195,24 +191,24 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-Future<Object?> _openOverlay(BuildContext context, Widget route) {
-  return showGeneralDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: '',
-    pageBuilder: (context, animation, secondaryAnimation) => route,
-    transitionBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      var curve = const Cubic(0.20, 0.75, 0.75, 1.0);
-      final tween =
-          Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
+  Future<Object?> _openOverlay(BuildContext context, Widget route) {
+    return showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      pageBuilder: (context, animation, secondaryAnimation) => route,
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        var curve = const Cubic(0.20, 0.75, 0.75, 1.0);
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }

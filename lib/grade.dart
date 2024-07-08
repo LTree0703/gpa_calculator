@@ -200,10 +200,10 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                   alignment: Alignment.centerRight,
                                   child: ElevatedButton(
                                     style: const ButtonStyle(
-                                      elevation: MaterialStatePropertyAll(0),
-                                      backgroundColor: MaterialStatePropertyAll(
+                                      elevation: WidgetStatePropertyAll(0),
+                                      backgroundColor: WidgetStatePropertyAll(
                                           Color(0xffBBBBEB)),
-                                      shape: MaterialStatePropertyAll(
+                                      shape: WidgetStatePropertyAll(
                                         RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(20.0),
@@ -238,10 +238,10 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                                   alignment: Alignment.centerRight,
                                   child: ElevatedButton(
                                     style: const ButtonStyle(
-                                      elevation: MaterialStatePropertyAll(0),
-                                      backgroundColor: MaterialStatePropertyAll(
+                                      elevation: WidgetStatePropertyAll(0),
+                                      backgroundColor: WidgetStatePropertyAll(
                                           Color(0xff123252)),
-                                      shape: MaterialStatePropertyAll(
+                                      shape: WidgetStatePropertyAll(
                                         RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(20.0),

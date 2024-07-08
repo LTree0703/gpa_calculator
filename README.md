@@ -1,16 +1,14 @@
-# gpa_calculator
+# Pass 3 Exceed 4 GPA Calculator
 
-A new Flutter project.
+A mobile GPA calculator app based on flutter.
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+This app was inspired by the online GPA Calculator. Since it was only available on the internet, I decided to make a mobile version of it with optimized user experience. 
+- This app consists of two calculators: GPA and Grade calculator.
 
-A few resources to get you started if this is your first Flutter project:
+1. GPA calculator: Calculate your semester and cumulative GPA based on the grades of your courses.
+2. Grade Calculator: Predict the overall grade of your course based on the components of the course assessments. (This may, however, subject to the curve of every course and the decision of course instructors and may differ among each course)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+

@@ -36,9 +36,9 @@ class TopBar extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
             child: ElevatedButton(
               style: const ButtonStyle(
-                shape: MaterialStatePropertyAll(CircleBorder()),
-                backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-                shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                shape: WidgetStatePropertyAll(CircleBorder()),
+                backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+                shadowColor: WidgetStatePropertyAll(Colors.transparent),
               ),
               onPressed: () {
                 Navigator.pop(context);

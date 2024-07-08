@@ -132,10 +132,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
                               style: const ButtonStyle(
-                                elevation: MaterialStatePropertyAll(0),
+                                elevation: WidgetStatePropertyAll(0),
                                 backgroundColor:
-                                    MaterialStatePropertyAll(Color(0xffAAAADA)),
-                                shape: MaterialStatePropertyAll(
+                                    WidgetStatePropertyAll(Color(0xffAAAADA)),
+                                shape: WidgetStatePropertyAll(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(20.0),
@@ -153,10 +153,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: const ButtonStyle(
-                              elevation: MaterialStatePropertyAll(0),
+                              elevation: WidgetStatePropertyAll(0),
                               backgroundColor:
-                                  MaterialStatePropertyAll(Colors.blueGrey),
-                              shape: MaterialStatePropertyAll(
+                                  WidgetStatePropertyAll(Colors.blueGrey),
+                              shape: WidgetStatePropertyAll(
                                   BeveledRectangleBorder())),
                           onPressed: null,
                           child: Text(defaultCourses.toString()),
@@ -169,10 +169,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
                               style: const ButtonStyle(
-                                elevation: MaterialStatePropertyAll(0),
+                                elevation: WidgetStatePropertyAll(0),
                                 backgroundColor:
-                                    MaterialStatePropertyAll(Color(0xff345374)),
-                                shape: MaterialStatePropertyAll(
+                                    WidgetStatePropertyAll(Color(0xff345374)),
+                                shape: WidgetStatePropertyAll(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(20.0),
@@ -211,10 +211,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
                               style: const ButtonStyle(
-                                elevation: MaterialStatePropertyAll(0),
+                                elevation: WidgetStatePropertyAll(0),
                                 backgroundColor:
-                                    MaterialStatePropertyAll(Color(0xffAAAADA)),
-                                shape: MaterialStatePropertyAll(
+                                    WidgetStatePropertyAll(Color(0xffAAAADA)),
+                                shape: WidgetStatePropertyAll(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(20.0),
@@ -232,10 +232,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: const ButtonStyle(
-                              elevation: MaterialStatePropertyAll(0),
+                              elevation: WidgetStatePropertyAll(0),
                               backgroundColor:
-                                  MaterialStatePropertyAll(Colors.blueGrey),
-                              shape: MaterialStatePropertyAll(
+                                  WidgetStatePropertyAll(Colors.blueGrey),
+                              shape: WidgetStatePropertyAll(
                                   BeveledRectangleBorder())),
                           onPressed: null,
                           child: Text(defaultAssignments.toString()),
@@ -248,10 +248,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
                               style: const ButtonStyle(
-                                elevation: MaterialStatePropertyAll(0),
+                                elevation: WidgetStatePropertyAll(0),
                                 backgroundColor:
-                                    MaterialStatePropertyAll(Color(0xff345374)),
-                                shape: MaterialStatePropertyAll(
+                                    WidgetStatePropertyAll(Color(0xff345374)),
+                                shape: WidgetStatePropertyAll(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(20.0),
